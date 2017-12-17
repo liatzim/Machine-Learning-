@@ -1,0 +1,200 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Oct 14 15:02:31 2017
+
+@author: liat
+"""
+
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+'''Creating a series'''
+
+s=pd.Series([1,2,3,4,np.nan,5])
+s
+
+''' MISSING DATA'''
+
+dataset=pd.read_csv("Data.csv")
+X=dataset.iloc[:,:-1].values
+y=dataset.iloc[:,3]
+
+# Taking care of missing data
+
+from sklearn.preprocessing import Imputer
+imputer=Imputer(missing_values = 'NaN', strategy='mean',axis=0)
+imputer= imputer.fit(X[:,1:3])
+X[:,1:3]=imputer.transform(X[:,1:3])
+
+
+'''Encoding categorical data'''
+
+# Encoding the Independent Variable
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+labelencoder_X = LabelEncoder()
+X[:, 0] = labelencoder_X.fit_transform(X[:, 0])
+onehotencoder = OneHotEncoder(categorical_features = [0])
+X = onehotencoder.fit_transform(X).toarray()
+# Encoding the Dependent Variable
+labelencoder_y = LabelEncoder()
+y = labelencoder_y.fit_transform(y)
+
+
+# Splitting the dataset into the Training set and Test set
+from sklearn.cross_validation import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+
+'''Feature Scaling'''
+rom sklearn.preprocessing import StandardScaler
+sc_X = StandardScaler()
+X_train = sc_X.fit_transform(X_train)
+X_test = sc_X.transform(X_test)
+sc_y = StandardScaler()
+y_train = sc_y.fit_transform(y_train)
+
+
+'''Creating dataframe'''
+
+dates=pd.date_range('20130101',periods=7)
+dates
+
+df=pd.DataFrame(np.random.randn(7,4),index=dates,columns=list("ABCD"))
+df
+
+df2 = pd.DataFrame({ 'A' : 1.,
+                       'B' : pd.Timestamp('20130102'),
+                      'C' : pd.Series(1,index=list(range(4)),dtype='float32'),
+                    'D' : np.array([3] * 4,dtype='int32'),
+                  'E' : pd.Categorical(["test","train","test","train"]),
+                   'F' : 'foo' })
+
+# Types
+
+df2.dtypes
+
+# Viewing
+
+df.head()
+df.tail(3)
+df.index
+# Selecting only columns
+df.columns
+# Values selction
+df.values
+# Description
+df.describe
+# Transposing
+df.T
+df.sort_index(axis=1,ascending=False)
+
+# Single column selection
+df['A']
+df[0:3]
+df['20130102':'20130104']
+
+
+# IMPORTING
+
+import statistics as s
+
+example_list=[5,4,3,2,3,1,10]
+
+print (statistics.mean(example_list))
+
+print (statistics.median(example_list))
+
+print (s.mode(example_list))
+
+# We dont necessarily have to import all the package, can import only mean
+
+from statistics import mean
+
+# More than one function imported
+
+from statistics import mean, median
+
+from statistics import mean as m, median as d
+
+print (mean(example_list))
+
+# import all but dont write statistics each time
+
+from statistics import *
+
+'''NUMPY - useful numbers crunching module'''
+
+'''MATPLOTLIB - graphing'''
+
+
+x = [1, 5, 1.5, 8, 1, 9]
+y = [2, 8, 1.8, 8, 0.6, 1]
+
+plt.scatter(x,y)
+plt.show()
+
+Converting data to Numpy array
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib import style
+style.use("ggplot")
+from sklearn.cluster import KMeans
+
+
+X = np.array([[1, 2],
+              [5, 8],
+              [1.5, 1.8],
+              [8, 8],
+              [1, 0.6],
+              [9, 11]])
+
+kmeans = KMeans(n_clusters=2)
+kmeans.fit(X)
+
+centroids = kmeans.cluster_centers_
+labels = kmeans.labels_
+
+print(centroids)
+print(labels)
+
+
+colors = ["g.","r.","c.","y."]
+
+for i in range(len(X)):
+    print("coordinate:",X[i], "label:", labels[i])
+    plt.plot(X[i][0], X[i][1], colors[labels[i]], markersize = 10)
+
+
+plt.scatter(centroids[:, 0],centroids[:, 1], marker = "x", s=150, linewidths = 5, zorder = 10)
+
+plt.show()
+
+
+
+##
+dict = {'Name': 'Zara', 'Age': 7, 'Class': 'First'}
+print ("dict['Name']: ", dict['Name'])
+print ("dict['Age']: ", dict['Age'])
+
+# מחזירה את רשימת המפתחות במילון
+dict.keys
+# מחזירה את רשימת הערכים במילון
+dict.values
+type(dict)
+
+# Opening and writing
+
+opened_file=open('x.txt','w')
+opened_file.write('My first line\n')
+opened_file.write('My second line\n')
+
+
+opened_file.close()
+opened_file=open('x.txt','r')
+content=opened_file.read()
+print (content)
+
+# 

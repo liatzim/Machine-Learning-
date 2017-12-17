@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Oct 28 11:45:26 2017
+
+@author: liat
+"""
+
+# Natural Language Processing
+
+# Importing the libraries
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# Importing the dataset
+dataset = pd.read_csv('Restaurant_Reviews.tsv', delimiter = '\t', quoting = 3)
+'''quating 3 is ignoring the double quates in the text'''
+# Cleaning the texts
+import re
+review = re.sub('[^a-zA-Z]',' ',dataset['Review'][0]) # re is a library for text cleaning 
+dataset['Review'][0]
+import nltk
+nltk.download('stopwords') # nltk library removes all the irrelevant words to the review
+from nltk.corpus import stopwords
+from nltk.stem.porter import PorterStemmer # stemming the words to keep only the root of the word, love instead of loved
+corpus = [] # collection of texts , initialize as an empty list
+for i in range(0, 1000):
+    review = re.sub('[^a-zA-Z]', ' ', dataset['Review'][i])
+    # first parameter in sub :
+        # all the things we dont want to remove - all the letters from a to z 
+        # 2nd parameter is space, every thing removed would be replaced by a space 
+    review = review.lower() # lower = replace all capital letters by small letters
+    review = review.split() # transformed the review into a list with 4 different elements 
+    ps = PorterStemmer()
+    review = [ps.stem(word) for word in review if not word in set(stopwords.words('english'))]
+    review = ' '.join(review) # joing the words together again, adding a space between the words, the list reverses back to str
+    corpus.append(review)
+
+# Creating the Bag of Words model
+''''''
+from sklearn.feature_extraction.text import CountVectorizer 
+cv = CountVectorizer(max_features = 1500) # max feature keeps only the most relevant words that were used the most, so if there are 1M words we dont want everything, we want the most frequent ones. 
+X = cv.fit_transform(corpus).toarray()
+y = dataset.iloc[:, 1].values
+
+# Splitting the dataset into the Training set and Test set
+from sklearn.cross_validation import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20, random_state = 0)
+
+# Fitting Naive Bayes to the Training set
+from sklearn.naive_bayes import GaussianNB
+classifier = GaussianNB()
+classifier.fit(X_train, y_train)
+
+# Predicting the Test set results
+y_pred = classifier.predict(X_test)
+
+# Making the Confusion Matrix
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_test, y_pred) 
+

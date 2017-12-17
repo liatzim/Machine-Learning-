@@ -1,0 +1,120 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Oct 16 20:57:01 2017
+
+@author: liat
+"""
+
+'''THEANO LIBRARY - open source numerical coputation, very fast, runs on the GPU 
+which is responsible for graphics in the computer'''
+
+ dataset=pd.read_csv('Churn_Modelling.csv')
+X=dataset.iloc[:, 3:13].values
+y=dataset.iloc[:,13].values
+
+# Encoding categorical data 
+
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+labelencoder_X_1= LabelEncoder()
+X[:,1]=labelencoder_X_1.fit_transform(X[:, 1])
+
+labelencoder_X_2= LabelEncoder()
+X[:,2]=labelencoder_X_2.fit_transform(X[:, 2])
+
+# Make sure the variables are not ordinal
+onehotencoder= OneHotEncoder(categorical_features = [1])
+X= onehotencoder.fit_transform(X).toarray()        
+
+# Remove one of the columns for the dummy variable to avoid a trup
+
+X=X[:, 1:]      
+              
+# split
+
+from sklearn.model_selection import train_test_split
+X_train,X_test,y_train,y_test = train_test_split(X,y,test_size=0.2, random_state=0)
+
+# Feature scaling
+
+from sklearn.preprocessing import StandardScaler 
+sc =StandardScaler()
+X_train=sc.fit_transform(X_train)
+X_test=sc.transform(X_test)
+
+# Importing keras
+
+import keras 
+from keras.models import Sequential
+from keras.layers import Dense
+
+'''dense - create layers in the NN'''
+'''sequential - to initialize the NN'''
+
+
+# Initialize the ANN
+
+classifier = Sequential()
+
+# Adding the input layer and the first hidden layer
+
+classifier.add(Dense(output_dim=6,
+                    init='uniform',
+                    activation='relu',
+                    input_dim=11))
+
+
+'''output_dim = number of nodes in the hidden 
+layer, usually choose average nodes of the input 
+and output layers. So 11 independent 
+variables (input), plus 1 dependent (output), over 2 = 6'''
+
+'''specify input_dim only for the first hidden layer because it doesnt know what to expect yet
+afterwords no need to specify again'''
+
+# Adding a second hidden layer
+
+classifier.add(Dense(output_dim=6,
+                    init='uniform',
+                    activation='relu'))
+
+#  Adding the output layer 
+
+classifier.add(Dense(output_dim= 1,
+                    init='uniform',
+                    activation='sigmoid'))
+
+'''if dependent variable has more than two categories, 
+insert safmax instead of sigmoid in the activation 
+function. :
+    Its the same function but deals with more than 
+    2 categories'''
+
+# Complining the ANN
+
+classifier.compile(optimizer = 'adam',
+                   loss='binary_crossentropy',
+                   metrics= ['accuracy'])
+
+
+'''optimizer - to find the optimal set of weights, this is the 
+stochastic gradient descent algorithm'''
+
+
+# Fitting the ANN to the training set
+
+classifier.fit(X_train,y_train, batch_size=10, nb_epoch=100)
+
+
+# Predict the test set results
+
+y_pred=classifier.predict(X_test)
+y_pred = (y_pred > 0.5)
+
+'''returns true if larger than 0.5'''
+
+# Confusion matrix
+
+from sklearn.metrics import confusion_matrix
+cm=confusion_matrix(y_test, y_pred)
+cm

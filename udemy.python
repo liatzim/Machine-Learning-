@@ -1,0 +1,329 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Oct 28 14:08:58 2017
+
+@author: liat
+"""
+
+'''variables = like containers '''
+
+greeting = "hello"
+print (greeting)
+
+'''Enter an input'''
+
+greeting2= input("Write a greeting: ")
+print (greeting2)
+
+'''numbers'''
+
+age=input("Your age: ")
+new_age=int(age)+50 # if i didnt put int in front of the variable i wouldve gotten an error
+# cannot concatanate string + int , and input is a string 
+print (new_age)
+
+new_age=float(age)+50 # float works too
+
+# COding exercise 1 
+
+name = "John Snow"
+age = 29 
+price = 10 
+print (price)
+
+'''number operations'''
+print (3**2)
+
+'''Replace string'''
+
+"Here".replace("e","i",1)
+
+'''indexing'''
+
+c= "Hi there!"
+c[3]
+c[-2]
+
+letters = 'abcdefghijklmnopqrstuvwxyz'
+print(letters[-2]) # index y 
+
+'''LIST'''
+
+C=["H",2,"HELLO"]
+C[:2]
+C[2]
+type(c[:2])
+dir(list)
+
+C.add[3]
+C.append(3)
+C.remove(2)
+
+'''TUPLES'''
+# TUPLES ARE NOT MUTABLE, CANNOT CHANGE THEM
+# cannot append, clear,copy tuples 
+print 9
+
+'''type error = somethign wrong with one of the object types'''
+'''name error = no variable defined'''
+
+
+'''functions'''
+# can give the function any name you like
+# insert the vairable in parenthesis 
+# explain whats needed to be done
+# print the function name 
+
+
+def multiply(x,y):
+    return x*y
+print (multiply(5,5))
+
+def addition ( x,y,z):
+    return x+y+z
+print (addition(1,2,3))
+
+def divide(a,b):
+    try:
+        return a/b
+    except ZeroDivisionError::
+        return "Zero division is meaningless"
+print (divide(1,0))
+## ONE ARGUMENT
+
+def minutes_to_hours(minutes):
+    hours=minutes/60
+    return hours
+print (minutes_to_hours(120))
+## TWO ARGUMENTS
+def minutes_to_hours(seconds,minutes):
+    hours=minutes/60 + seconds / 3600
+    return hours
+print (minutes_to_hours(300, 200))
+
+## TWO ARGUMENTS WITH A DEFAULT ONE 
+def minutes_to_hours(seconds,minutes=70):
+    hours=minutes/60 + seconds / 3600
+    return hours
+print (minutes_to_hours(300,))
+
+## TWO ARGUMENTS WITH A DEFAULT ONE -
+'''If specifying a value in the bottom, overwrites the upper value 
+in the definition'''
+def minutes_to_hours(seconds,minutes=70):
+    hours=minutes/60 + seconds / 3600
+    return hours
+print (minutes_to_hours(300, 200))
+
+# New function
+
+def age_foo(age):
+    new_age= float(age) + 50 
+    return new_age
+
+age = input ("Your age: ")
+print (age_foo(age))
+50
+
+## Convert celsios to fernheit
+
+def cel_to_fer(c):
+    if c < -237.15: 
+        return " you have reached the minimum"
+    else:
+        f= c*9/5+32
+        return f
+print (cel_to_fer(-280))
+
+## Create a function that takes a string and returns the length
+
+def string (x):
+    if type (x) ==int:
+        return "Sorry, integers dont have length"
+    elif type(x) ==float:
+        return "Sorry, floats dont count too"
+    else:
+        return len(x)
+    
+print (string ("Hello"))
+
+## If else
+
+a >7 
+if a<5 :
+    print ("no")
+elif a== 5:
+    print ("YES")
+else: 
+    print ("maybe")
+    
+## LOOPS 
+
+numbers = [10,20,30,40,50,"hi"]
+
+for i in numbers:
+    if 0 in numbers:
+        print (i)
+    else:
+        print ("less than 3")
+        
+mylist=[1,2,3,4,5]
+
+for i in mylist:
+    print (i)
+    
+## READING A FILE 
+file = open("example.txt","r")
+content = file.read()
+print (content)
+file.seek(0)
+content = file.readlines()
+print (content)
+
+file = open("fruits.txt","r")
+content = file.read()
+for i in content:
+    
+    print (len(i) - 1)
+    
+## WRITING IN A FILE 
+'''can add files in one session only, cannot append'''
+'''append is a separate function'''
+file = open("example.txt","w")
+file.write("Line 1\n")
+file.write("line 2")
+file.close()
+
+file = open("example.txt","w")
+file.write("1\n")
+file.write("2\n")
+file.write("3\n")
+
+### Writing 1 2 3 in the file in separate lines 
+numbers = [1, 2, 3]
+file = open("numbers.txt", "w")
+for i in numbers:
+     file.write(str(i) + "\n")
+file.close()
+
+from datetime import datetime 
+
+import datetime
+now=datetime.now
+
+datetime.datetime.now()
+after=now+datetime.timedelta(days=2)
+
+
+### IMPORTING FILE NAMES AND NAMING THEM BY DATE 
+
+import glob2
+import datetime
+
+filenames=glob2.glob("*.txt")
+
+with open(datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S-%f")+".txt", 'w') as file:
+    for filename in filenames:
+        with open(filename,"r") as f:
+            file.write(f.read()+"\n")
+
+
+import json 
+help(json.load)
+data=json.load(open("data.json"))
+type(data)
+data["rain"]
+
+
+################# BUILDING A DICTIONARY ###########
+ 
+#1. count for non existing words by using the if statement 
+#2. Make the program case insensitive 
+#3. Calculating similarity ratio between two words
+#4. Making the program suggest a similar word
+#5. Approve the suggested word
+
+
+import difflib # library to compare texts 
+from difflib import SequenceMatcher
+SequenceMatcher(None,"rainn","rain").ratio()
+from difflib import get_close_matches
+
+import json
+from difflib import get_close_matches
+
+data = json.load(open("data.json"))
+
+def translate(w):
+  '''' w .lower() =this converted all words to lower case which is not perfect for us '''
+    if w in data:
+        return data[w]
+    elif w.lower() in data:
+        return data[w.lower()] '''this checks for the lowercase version in the data'''
+    elif len(get_close_matches(w, data.keys())) > 0:
+        yn = input("Did you mean %s instead? Enter Y if yes, or N if no: " % get_close_matches(w, data.keys())[0])
+        if yn == "Y":
+            return data[get_close_matches(w, data.keys())[0]]
+        elif yn == "N":
+            return "The word doesn't exist. Please double check it."
+        else:
+            return "We didn't understand your entry."
+    else:
+        return "The word doesn't exist. Please double check it."
+
+word = input("Enter word: ")
+output = translate(word)
+if type(output) == list:
+    for item in output:
+        print(item)
+else:
+    print(output)
+    
+    
+
+'''indexing combination of indexes and labels'''
+
+df.ix [3,"Name"]
+
+'''drop'''
+del dataset[ "Alcohol"] 
+
+ '''add'''
+ dataset["Alc"]=dataset.shape[0]*["North"]
+ 
+ 
+
+'''NUMPY = provides multi dimentional array object'''
+
+import numpy as np
+import pandas as pd
+
+n=np.arange(27)
+print (n)
+
+'''2 dimentional array'''
+n.reshape(3,9)
+
+'''3 dimentional array'''
+n.reshape(3,3,3)
+
+'''Importing an image'''
+
+import cv2
+im_g=cv2.imread("smallgray.png",0) '''0 grey scale, 1 is blue green or red'''
+img_g
+
+'''indexing numpy array'''
+im_g[0:2,2:4] '''first two columns and 3 and 4 variables'''
+
+
+'''stacking numpy'''
+
+ims=numpy.hstack((im_g,im_g)) '''horizontal stacking'''
+ims=numpy.vstack((im_g,im_g)) '''vertical stacking'''
+
+
+
+
+
